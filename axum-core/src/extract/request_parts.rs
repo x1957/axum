@@ -113,7 +113,7 @@ where
     async fn from_request(req: Request, _: &S) -> Result<Self, Self::Rejection> {
         let mut body = req.into_limited_body();
 
-        // If there's only 1 chunk, we can just return Buf::to_bytes()
+        // If there's only 1 chunk, we can just return it as-is
         let first_chunk = if let Some(frame) = body
             .frame()
             .await
