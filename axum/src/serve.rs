@@ -388,7 +388,11 @@ fn is_connection_error(e: &io::Error) -> bool {
 
 async fn tcp_accept(listener: &TcpListener) -> Option<(TcpStream, SocketAddr)> {
     match listener.accept().await {
-        Ok(conn) => Some(conn),
+        Ok(conn) => {
+            println!("set nodelay for conn: {:?}", conn);
+            conn.0.set_nodelay(true).expect("set_nodelay failed");
+            Some(conn)
+        },
         Err(e) => {
             if is_connection_error(&e) {
                 return None;
